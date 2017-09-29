@@ -24,26 +24,20 @@ export class MyWebViewCustomUrl extends Component {
     super(props);
   }
 
-  _onLoadStart() {
-    Reactotron.log("_onLoadStart called");
-    this.setState({ webViewLoading: true });
-  }
+  // _onLoadStart() {
+  //   Reactotron.log("_onLoadStart called");
+  //   this.setState({ webViewLoading: true });
+  // }
 
-  _onLoadEnd() {
-    Reactotron.log("_onLoadEnd called");
-    this.setState({ webViewLoading: false, webviewLoaded: true });
-  }
+  // _onLoadEnd() {
+  //   Reactotron.log("_onLoadEnd called");
+  //   this.setState({ webViewLoading: false, webviewLoaded: true });
+  // }
 
-  _onLoad() {
-    Reactotron.log("_onLoad called");
-    this.setState({ webViewLoading: false, webviewLoaded: true });
-  }
-
-  _onMessage(data) {
-    //Prints out data that was passed.
-    console.log(data);
-  }
-
+  // _onLoad() {
+  //   Reactotron.log("_onLoad called");
+  //   this.setState({ webViewLoading: false, webviewLoaded: true });
+  // }
 
   _onMessage(data) {
     //Prints out data that was passed.
@@ -53,9 +47,9 @@ export class MyWebViewCustomUrl extends Component {
   renderLoading()
   {
     return (
-      // <ActivityIndicator/>
-      <View style={{ paddingTop: 200, alignItems: 'center', justifyContent: 'center' }}>
-        <ActivityIndicator size='large'/>
+      //<ActivityIndicator/>
+      <View>
+        <ActivityIndicator size='large' style={{ paddingTop: 200, alignItems: 'center', justifyContent: 'center' }}/>
       </View>
     )
   }
