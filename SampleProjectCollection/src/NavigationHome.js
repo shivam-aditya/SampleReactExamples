@@ -29,6 +29,8 @@ import buzzhome from './components/buzzhome';
 import Pager from './components/carouselSample1';
 import { CarouselExample, CarouselExample2 } from './components/sixtyHome';
 import { MyWebViewDefault, MyWebViewCustomUrl } from './components/WebViewExample';
+import FadeInView from './components/AnimationSample';
+import {YoutubeSample2, YoutubeSample} from './components/YoutubeControl';
 
 export class HomeView extends Component {
     static navigationOptions = {
@@ -69,6 +71,12 @@ export class HomeView extends Component {
                     <View style={styles.button}>
                         <Button onPress={() => navigate('PaginationMaster')} title="robotImpagination" />
                     </View>
+                    <View style={styles.button}>
+                        <Button onPress={() => navigate('animationHome')} title="animationHome" />
+                    </View>
+                    <View style={styles.button}>
+                        <Button onPress={() => navigate('youtubeSample')} title="youtubeSample" />
+                    </View>
                 </View>
             </ScrollView>
         );
@@ -91,7 +99,9 @@ export default NavigationHome = StackNavigator({
     Pagination: { screen: robotImpagination },        
     Recent: { screen: RecentChatsScreen },
     sixty: {screen: CarouselExample},  
-    newsHome : {screen:CarouselExample2}  
+    newsHome : {screen:CarouselExample2},
+    animationHome : {screen:FadeInView},
+    youtubeSample: {screen: YoutubeSample}  
 });
 
 const styles = StyleSheet.create({
