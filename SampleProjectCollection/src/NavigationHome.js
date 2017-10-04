@@ -34,6 +34,7 @@ import {YoutubeSample2, YoutubeSample} from './components/YoutubeControl';
 import SomeComponent from './components/GestureSample';
 import {DrawerSample} from './components/DrawerSample';
 import {SliderSample, BottomSheet} from './components/SliderSample';
+import {PickerExample} from './components/PickerSample'
 
 export class HomeView extends Component {
     static navigationOptions = {
@@ -92,6 +93,9 @@ export class HomeView extends Component {
                     <View style={styles.button}>
                         <Button onPress={() => navigate('BottomSheet')} title="BottomSheet" />
                     </View>
+                    <View style={styles.button}>
+                        <Button onPress={() => navigate('PickerExample')} title="PickerExample" />
+                    </View>
                 </View>
             </ScrollView>
         );
@@ -120,7 +124,8 @@ export default NavigationHome = StackNavigator({
     GestureSample: {screen: SomeComponent},
     DrawerSample: {screen: DrawerSample},
     SliderSample: {screen: SliderSample},
-    BottomSheet: {screen: BottomSheet}                 
+    BottomSheet: {screen: BottomSheet},    
+    PickerExample: {screen: PickerExample}                        
 });
 
 const styles = StyleSheet.create({
