@@ -31,6 +31,9 @@ import { CarouselExample, CarouselExample2 } from './components/sixtyHome';
 import { MyWebViewDefault, MyWebViewCustomUrl } from './components/WebViewExample';
 import FadeInView from './components/AnimationSample';
 import {YoutubeSample2, YoutubeSample} from './components/YoutubeControl';
+import SomeComponent from './components/GestureSample';
+import {DrawerSample} from './components/DrawerSample';
+import {SliderSample, BottomSheet} from './components/SliderSample';
 
 export class HomeView extends Component {
     static navigationOptions = {
@@ -77,6 +80,18 @@ export class HomeView extends Component {
                     <View style={styles.button}>
                         <Button onPress={() => navigate('youtubeSample')} title="youtubeSample" />
                     </View>
+                    <View style={styles.button}>
+                        <Button onPress={() => navigate('GestureSample')} title="GestureSample" />
+                    </View>
+                    <View style={styles.button}>
+                        <Button onPress={() => navigate('DrawerSample')} title="DrawerSample" />
+                    </View>
+                    <View style={styles.button}>
+                        <Button onPress={() => navigate('SliderSample')} title="SliderSample" />
+                    </View>
+                    <View style={styles.button}>
+                        <Button onPress={() => navigate('BottomSheet')} title="BottomSheet" />
+                    </View>
                 </View>
             </ScrollView>
         );
@@ -101,7 +116,11 @@ export default NavigationHome = StackNavigator({
     sixty: {screen: CarouselExample},  
     newsHome : {screen:CarouselExample2},
     animationHome : {screen:FadeInView},
-    youtubeSample: {screen: YoutubeSample}  
+    youtubeSample: {screen: YoutubeSample},
+    GestureSample: {screen: SomeComponent},
+    DrawerSample: {screen: DrawerSample},
+    SliderSample: {screen: SliderSample},
+    BottomSheet: {screen: BottomSheet}                 
 });
 
 const styles = StyleSheet.create({

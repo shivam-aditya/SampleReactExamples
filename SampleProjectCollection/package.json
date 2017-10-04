@@ -22,8 +22,11 @@
 		"react-native-maps": "^0.16.4",
 		"react-native-progressive-image": "^1.0.4",
 		"react-native-swipe-cards": "^0.1.0",
+		"react-native-swipe-gestures": "^1.0.2",
 		"react-native-vector-icons": "^4.4.0",
+		"react-native-youtube": "^1.0.0",
 		"react-navigation": "^1.0.0-beta.11",
+		"rn-sliding-up-panel": "^1.1.6",
 		"util": "^0.10.3"
 	},
 	"devDependencies": {
