@@ -263,7 +263,6 @@ export class CarouselExample2 extends Component {
 
     componentDidUpdate() {
         //Reactotron.log("componentDidUpdate called. 1st item visibility is:" + this._isThisFirstItem);
-        
         if(this._isThisFirstItem===true && this.state.datasetState[0].content!=null)
         {
             //Reactotron.log("1st item content is:" + this.state.datasetState[0].content.content);                            
@@ -319,7 +318,7 @@ export class CarouselExample2 extends Component {
         return this.state.datasetState.map((item, index) => {
             //Reactotron.log("Record came. Index is " + index);
             var imageURL = 'http://i3.kym-cdn.com/photos/images/newsfeed/000/925/494/218.png_large';
-            imageHeight = 150;
+            imageHeight = 200;
             //imageWidth=250;
             imageWidth = width * 0.85;
             if (item !== undefined &&
@@ -358,7 +357,7 @@ export class CarouselExample2 extends Component {
                 webViewContent = item.content.content;
                 if (webViewContent.length > 200) {
                     //Reactotron.log("Length greater than 200");
-                    webViewContent = webViewContent.slice(1, 61);
+                    webViewContent = webViewContent.slice(1, 200);
                     webViewContent = webViewContent.concat("...");
                     //Reactotron.log("webViewContent content is: " + webViewContent);
                 }
