@@ -9,6 +9,9 @@ import {
     Alert,
     WebView,
     ScrollView,
+    Animated,
+    Button,
+    TouchableOpacity
 } from 'react-native';
 
 import Carousel from 'react-native-looped-carousel';
@@ -19,6 +22,7 @@ import { MyWebViewFromHtml } from './WebViewExample';
 import Reactotron from 'reactotron-react-native';
 //import Commons from '../CommonUtility';//var x=Commons.IsAndroid();
 import HTMLView from 'react-native-htmlview';
+import SlidingUpPanel from 'rn-sliding-up-panel'
 
 import {
     Header,
@@ -217,16 +221,26 @@ export class CarouselExample extends Component {
 export class CarouselExample2 extends Component {
     static navigationOptions = {
         title: `News`,
-      };
+    };
+
+    static defaultProps = {
+        draggableRange: {
+            top: height, //defines height of bottom slider. default value is height/1.5
+            bottom: 120
+        }
+    }
+
+    _draggedValue = new Animated.Value(-120);
 
     constructor(props) {
         super(props);
 
         this.state = {
-            size: { width, height },
-            dataset: null,
-            datasetState: null,
-        };
+            _defaultWebViewContent:'Bottom Sheet Content',
+            api:'8'            
+        }
+        this._isThisFirstItem = true;                
+        this._renderFavoriteIcon = this._renderFavoriteIcon.bind(this);
     }
 
     setCarouselRef = (ref) => {
@@ -247,6 +261,17 @@ export class CarouselExample2 extends Component {
         this.setupImpagination();
     }
 
+    componentDidUpdate() {
+        //Reactotron.log("componentDidUpdate called. 1st item visibility is:" + this._isThisFirstItem);
+        
+        if(this._isThisFirstItem===true && this.state.datasetState[0].content!=null)
+        {
+            //Reactotron.log("1st item content is:" + this.state.datasetState[0].content.content);                            
+            this.setState({_defaultWebViewContent:this.state.datasetState[0].content.content});
+            this._isThisFirstItem = false;
+        }                                               
+    }
+
     setupImpagination() {
         let dataset = new Dataset({
             pageSize: 10,
@@ -260,11 +285,15 @@ export class CarouselExample2 extends Component {
 
             // Where to fetch the data from.
             fetch(pageOffset, pageSize, stats) {
+                Reactotron.log("API value is" + this.state.api);                
                 realPage = pageOffset + 1;
                 itemNumber = (realPage) * 10;
                 maxIndex = itemNumber - 1;
-                //http://api-news.dailyhunt.in/api/v1/headlines/user/889065839?returnTickers=true&pageNumber=1&pageScrollStart=1506324249000&src=orig&dsSalt=20170925125512127&langCode=en,hi&cpMaxIndex=9&edition=india&pageSize=10&isHome=true&cdn=N&dsOffset=0
-                url = "http://api-news.dailyhunt.in/api/v1/headlines/user/889065839?returnTickers=true&pageNumber=" + realPage + "&pageScrollStart=1506324249000&src=orig&dsSalt=20170925125512127&langCode=en,hi&cpMaxIndex=" + maxIndex + "&edition=india&pageSize=" + pageSize + "&isHome=true&cdn=N&dsOffset=0";
+                //http://api-news.dailyhunt.in/api/v1/pages/topic/content/104?returnTickers=false&pageNumber=1&src=orig&dsSalt=1507115410834&langCode=en,hi&pageSize=10&cdn=N&dsSize=50&pageScrollStart=1507115410834&cpMaxIndex=9&state=published&dsOffset=0
+                //http://api-news.dailyhunt.in/api/v1/pages/topic/content/8?returnTickers=false&pageNumber=1&pageScrollStart=1507115373000&src=orig&dsSalt=20171004164252513&langCode=en,hi&cpMaxIndex=9&pageSize=10&state=published&cdn=N&dsOffset=0
+                //http://api-news.dailyhunt.in/api/v1/headlines/user/889065839?returnTickers=false&pageNumber=1&pageScrollStart=1506324249000&src=orig&dsSalt=20170925125512127&langCode=en,hi&cpMaxIndex=9&edition=india&pageSize=10&isHome=true&cdn=N&dsOffset=0
+                url = "http://api-news.dailyhunt.in/api/v1/headlines/user/889065839?returnTickers=false&pageNumber=" + realPage + "&pageScrollStart=1506324249000&src=orig&dsSalt=20170925125512127&langCode=en,hi&cpMaxIndex=" + maxIndex + "&edition=india&pageSize=" + pageSize + "&isHome=true&cdn=N&dsOffset=0";
+                //url="http://api-news.dailyhunt.in/api/v1/pages/topic/content/8?returnTickers=false&pageNumber=" + realPage + "&pageScrollStart=1507115373000&src=orig&dsSalt=20171004164252513&langCode=en,hi&cpMaxIndex=" + maxIndex + "&pageSize=" + pageSize + "&state=published&cdn=N&dsOffset=0";
                 Reactotron.log("Item number is :" + itemNumber + " and url is: " + url);
                 return fetch(url)
                     .then(response => {
@@ -283,16 +312,16 @@ export class CarouselExample2 extends Component {
 
         // Set the readOffset to the first record in the state
         dataset.setReadOffset(0);
-        this.setState({ dataset });
+        this.setState({ dataset });              
     }
 
     renderItem() {
         return this.state.datasetState.map((item, index) => {
-            //console.log("Record came. Index is " + index);
+            //Reactotron.log("Record came. Index is " + index);
             var imageURL = 'http://i3.kym-cdn.com/photos/images/newsfeed/000/925/494/218.png_large';
-            imageHeight=150;
+            imageHeight = 150;
             //imageWidth=250;
-            imageWidth=width*0.85;
+            imageWidth = width * 0.85;
             if (item !== undefined &&
                 item != null &&
                 item.content !== undefined &&
@@ -300,19 +329,16 @@ export class CarouselExample2 extends Component {
                 if (item.content.contentImage !== undefined &&
                     item.content.contentImage != null) {
                     imageURL = item.content.contentImage.url;
-                    Reactotron.log("imageURL is " + imageURL)
+                    //Reactotron.log("imageURL is " + imageURL)
                 }
                 else if (item.content.sourceBrandImage !== undefined &&
                     item.content.sourceBrandImage != null) {
                     imageURL = item.content.sourceBrandImage.url;
-                    Reactotron.log("imageURL from brand is " + imageURL);
+                    //Reactotron.log("imageURL from brand is " + imageURL);
                     imageHeight = 50;
                     imageWidth = 250;
                 }
             }
-            //   else {
-            //       console.log("item is null");
-            //   }
 
             if (item.isPending && !item.isSettled) {
                 return <Spinner color="#00C497" key={Math.random()} />;
@@ -324,24 +350,34 @@ export class CarouselExample2 extends Component {
                 item.content != null) {
                 //Reactotron.log("item title is: "+item.content.title);
                 //Reactotron.log("item content sourceNameUni is: "+item.content.sourceNameUni);
-                //Reactotron.log("item content is: "+item.content.content);
+                //Reactotron.log("item content is: " + item.content.content);
 
                 windowHeight = this.state.size.height;
                 windowWidth = this.state.size.width;
+
+                webViewContent = item.content.content;
+                if (webViewContent.length > 200) {
+                    //Reactotron.log("Length greater than 200");
+                    webViewContent = webViewContent.slice(1, 61);
+                    webViewContent = webViewContent.concat("...");
+                    //Reactotron.log("webViewContent content is: " + webViewContent);
+                }
 
                 return (
                     // <TouchableHighlight onPress={this.onItemTap}>
                     <View style={{ height: windowHeight, width: windowWidth, flex: 1 }}>
                         <View style={[{ flex: 1 }, styles.card]}>
-                            <ScrollView style={{ flex: 1 }}>
+                            {/* <ScrollView style={{ flex: 1 }}> */}
                                 <TouchableHighlight onPress={() => this.onItemTap(item.content.deepLinkUrl)}>
-                                    <View>
-                                        <View style={[{ maxHeight: (95 / 100 * windowHeight), maxWidth: (95 / 100 * windowWidth) }, styles.cardItem]}>
-                                            <Text>{item.content.title}</Text>
-                                        </View>
-                                        <View style={styles.cardItem}>
-                                            <Image style={{ resizeMode: 'stretch', height: imageHeight, width: imageWidth }} source={{ uri: imageURL, cache: 'default' }} />
-                                        </View>
+                                <View>
+                                    <View style={styles.cardItem}>
+                                        <Image style={{ resizeMode: 'stretch', height: imageHeight, width: imageWidth }} source={{ uri: imageURL, cache: 'default' }} />
+                                    </View>
+                                    <View style={[{ maxHeight: (95 / 100 * windowHeight), maxWidth: (95 / 100 * windowWidth) }, styles.cardItem]}>
+                                        <Text style={{fontWeight: 'bold', fontSize: 18}}>
+                                            {item.content.title}
+                                        </Text>
+                                    </View>
                                     </View>
                                 </TouchableHighlight>
                                 {/* <WebView
@@ -354,10 +390,10 @@ export class CarouselExample2 extends Component {
                                     style={{ flex: 1 }}
                                     scalesPageToFit={true} /> */}
                                 <HTMLView
-                                    value={item.content.content}
+                                    value={webViewContent}
                                     stylesheet={stylesHtml}
                                     style={{ marginLeft: 20, marginRight: 20, }}
-                                    onLinkPress={(url) => console.log('clicked link: ', url)}
+                                    onLinkPress={(url) => Reactotron.log('clicked link: ', url)}
                                 />
                                 <TouchableHighlight onPress={() => this.onItemTap(item.content.deepLinkUrl)}>
                                     <View style={styles.cardItem}>
@@ -368,17 +404,13 @@ export class CarouselExample2 extends Component {
                                         </View>
                                     </View>
                                 </TouchableHighlight>
-                            </ScrollView>
+                            {/* </ScrollView> */}
                         </View>
                     </View>
                 );
             }
         });
     }
-
-    onLink(href) {
-        Reactotron.log("Link was clicked!");     
-      }
 
     setCurrentReadOffset = (event) => {
         // let itemHeight = 402;
@@ -394,8 +426,10 @@ export class CarouselExample2 extends Component {
     }
 
     setReadOffset = (currentItemIndex) => {
-        console.log('currentItemIndex of the list is: ' + currentItemIndex);
-        this.state.dataset.setReadOffset(currentItemIndex);
+        //Reactotron.log('currentItemIndex of the list is: ' + currentItemIndex);
+        //Reactotron.log(this.state.datasetState[currentItemIndex].content.content);
+        this.setState({visible: false, _defaultWebViewContent:this.state.datasetState[currentItemIndex].content.content})
+        //this.state.dataset.setReadOffset(currentItemIndex);
     }
 
     onItemTap(shareUrl) {
@@ -405,9 +439,31 @@ export class CarouselExample2 extends Component {
         //this.dropdown.alertWithType("item.type", "title", "item.message");
     }
 
+    _renderFavoriteIcon() {
+        const { top, bottom } = this.props.draggableRange
+        const draggedValue = this._draggedValue.interpolate({
+            inputRange: [-(top + bottom) / 2, -bottom],
+            outputRange: [0, 1],
+            extrapolate: 'clamp'
+        })
+
+        const transform = [{ scale: draggedValue }]
+
+        return (
+            <Animated.View style={[styles.favoriteIcon, { transform }]}>
+                <Image source={require('../../assets/arrow-up.png')} style={{ width: 32, height: 32 }} />
+            </Animated.View>
+        )
+      }
+
+    //onAnimateNextPage={(p) => console.log(p)}> 
     render() {
         return (
             <View style={{ flex: 1 }} onLayout={this._onLayoutDidChange}>
+                {/* <Button
+                    onPress={() => navigate('Chat', { user: 'Lucy' })}
+                    title="Chat with Lucy"
+                /> */}
                 <Carousel
                     delay={2000}
                     style={this.state.size}
@@ -415,12 +471,39 @@ export class CarouselExample2 extends Component {
                     pageInfo={true}
                     currentPage={0}
                     bullets={false}
-                    onAnimateNextPage={(p) => console.log(p)}>
+                    onAnimateNextPage={this.setReadOffset}>
                     {this.renderItem()}
                     {/* <View style={[{ backgroundColor: '#BADA55' }, this.state.size]}><Text>1</Text></View>
                     <View style={[{ backgroundColor: 'red' }, this.state.size]}><Text>2</Text></View>
                     <View style={[{ backgroundColor: 'blue' }, this.state.size]}><Text>3</Text></View> */}
                 </Carousel>
+                <SlidingUpPanel
+                    visible
+                    showBackdrop={false}
+                    ref={(c) => { this._panel = c }}
+                    draggableRange={this.props.draggableRange}
+                    onDrag={(v) => this._draggedValue.setValue(v)}>
+                    <View style={styles.panel}>
+                        {this._renderFavoriteIcon()}
+                        <View style={styles.panelHeader}>
+                            <Text style={{ color: '#FFF' }}>News Details</Text>
+                        </View>
+                        <View style={styles.container}>
+                            {/* <Text>{this.state._defaultWebViewContent}</Text> */}
+                            <HTMLView
+                                    value={this.state._defaultWebViewContent}
+                                    stylesheet={stylesHtml}
+                                    style={{ marginTop:10, marginLeft: 20, marginRight: 20, }}
+                                    onLinkPress={(url) => Reactotron.log('clicked link: ', url)}
+                                />
+                            {/* <WebView
+                                source={{ html: this.state._defaultWebViewContent }}
+                                style={{flex:1, marginLeft: 20, marginRight: 20 }}
+                                scalesPageToFit={true}
+                                /> */}
+                        </View>
+                    </View>
+                </SlidingUpPanel>
             </View>
         );
     }
@@ -459,6 +542,34 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start', 
         justifyContent: 'flex-start' 
     },
+    container: {
+        flex: 1,
+        backgroundColor: '#f8f9fa',
+        alignItems: 'center',
+        justifyContent: 'flex-start'
+      },
+      panel: {
+        flex: 1,
+        backgroundColor: 'white',
+        position: 'relative'
+      },
+      panelHeader: {
+        height: 40,
+        backgroundColor: '#b197fc',
+        alignItems: 'center',
+        justifyContent: 'center'
+      },
+      favoriteIcon: {
+        position: 'absolute',
+        top: 0,
+        right: 24,
+        backgroundColor: '#2b8a3e',
+        width: 48,
+        height: 48,
+        padding: 8,
+        borderRadius: 24,
+        zIndex: 1
+      }
 });
 
 const stylesHtml = StyleSheet.create({
