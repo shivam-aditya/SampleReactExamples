@@ -12,7 +12,7 @@ import {
 import {
     StackNavigator,
     TabNavigator,
-    TabBarBottom 
+    TabBarBottom
 } from "react-navigation";
 
 import {
@@ -30,38 +30,42 @@ import Pager from './components/carouselSample1';
 import { CarouselExample, CarouselExample2 } from './components/sixtyHome';
 import { MyWebViewDefault, MyWebViewCustomUrl } from './components/WebViewExample';
 import FadeInView from './components/AnimationSample';
-import {YoutubeSample2, YoutubeSample} from './components/YoutubeControl';
+import { YoutubeSample2, YoutubeSample } from './components/YoutubeControl';
 import SomeComponent from './components/GestureSample';
-import {DrawerSample} from './components/DrawerSample';
-import {SliderSample, BottomSheet} from './components/SliderSample';
-import {PickerExample} from './components/PickerSample'
+import { DrawerSample } from './components/DrawerSample';
+import { SliderSample, BottomSheet } from './components/SliderSample';
+import { PickerExample } from './components/PickerSample'
+import SnapchatSliderHome from './components/SnapchatSwiperSample'
 
 export class HomeView extends Component {
     static navigationOptions = {
         title: `My Samples`,
-      };
+    };
     render() {
-        const { navigate } = this.props.navigation;        
+        const { navigate } = this.props.navigation;
         return (
             <ScrollView>
                 <View>
                     <View style={styles.button}>
-                        <Button onPress={() => navigate('sixty')} title="sixtyHome" />
-                    </View>
-                    <View style={styles.button}>
                         <Button onPress={() => navigate('newsHome')} title="newsHome" />
                     </View>
                     <View style={styles.button}>
-                        <Button onPress={() => navigate('HomeOld')} title="HomeOld" />
+                        <Button onPress={() => navigate('sixty')} title="sixtyHome" />
                     </View>
                     <View style={styles.button}>
                         <Button onPress={() => navigate('WebViewCustomUrl', { url: 'http://www.greaterkashmir.com/news/kashmir/kashmir-two-killed-30-injured-in-tral-grenade-blast/260861.html' })} title="MyWebViewCustomUrl" />
                     </View>
                     <View style={styles.button}>
-                        <Button onPress={() => navigate('WebViewDefault')} title="MyWebViewDefault" />
+                        <Button onPress={() => navigate('Deck')} title="DeckSwiperExample" />
                     </View>
                     <View style={styles.button}>
-                        <Button onPress={() => navigate('Deck')} title="DeckSwiperExample" />
+                        <Button onPress={() => navigate('DrawerSample')} title="DrawerSample" />
+                    </View>
+                    <View style={styles.button}>
+                        <Button onPress={() => navigate('HomeOld')} title="HomeOld" />
+                    </View>
+                    <View style={styles.button}>
+                        <Button onPress={() => navigate('WebViewDefault')} title="MyWebViewDefault" />
                     </View>
                     <View style={styles.button}>
                         <Button onPress={() => navigate('Pagination')} title="robotImpagination-My implementation" />
@@ -78,14 +82,11 @@ export class HomeView extends Component {
                     <View style={styles.button}>
                         <Button onPress={() => navigate('animationHome')} title="animationHome" />
                     </View>
-                    <View style={styles.button}>
+                    {/* <View style={styles.button}>
                         <Button onPress={() => navigate('youtubeSample')} title="youtubeSample" />
-                    </View>
+                    </View> */}
                     <View style={styles.button}>
                         <Button onPress={() => navigate('GestureSample')} title="GestureSample" />
-                    </View>
-                    <View style={styles.button}>
-                        <Button onPress={() => navigate('DrawerSample')} title="DrawerSample" />
                     </View>
                     <View style={styles.button}>
                         <Button onPress={() => navigate('SliderSample')} title="SliderSample" />
@@ -96,6 +97,9 @@ export class HomeView extends Component {
                     <View style={styles.button}>
                         <Button onPress={() => navigate('PickerExample')} title="PickerExample" />
                     </View>
+                    <View style={styles.button}>
+                        <Button onPress={() => navigate('SnapchatSliderHome')} title="SnapchatSliderHome" />
+                    </View>
                 </View>
             </ScrollView>
         );
@@ -104,28 +108,31 @@ export class HomeView extends Component {
 
 export default NavigationHome = StackNavigator({
     Home: { screen: HomeView },
-    HomeOld: { screen: MainScreenNavigator},
+    HomeOld: { screen: MainScreenNavigator },
     Chat: { screen: ChatScreen },
     WebViewCustomUrl: { screen: MyWebViewCustomUrl },
     WebViewDefault: { screen: MyWebViewDefault },
-    Deck: { screen: DeckSwiperExample },          
+    Deck: { screen: DeckSwiperExample },
     PaginationMaster: { screen: robotImpagination2 },
-    Carousel: {screen:Pager},
-    Buzz: { screen: buzzhome,
+    Carousel: { screen: Pager },
+    Buzz: {
+        screen: buzzhome,
         navigationOptions: {
             title: 'Buzz'
-    }},      
-    Pagination: { screen: robotImpagination },        
+        }
+    },
+    Pagination: { screen: robotImpagination },
     Recent: { screen: RecentChatsScreen },
-    sixty: {screen: CarouselExample},  
-    newsHome : {screen:CarouselExample2},
-    animationHome : {screen:FadeInView},
-    youtubeSample: {screen: YoutubeSample},
-    GestureSample: {screen: SomeComponent},
-    DrawerSample: {screen: DrawerSample},
-    SliderSample: {screen: SliderSample},
-    BottomSheet: {screen: BottomSheet},    
-    PickerExample: {screen: PickerExample}                        
+    sixty: { screen: CarouselExample },
+    newsHome: { screen: CarouselExample2 },
+    animationHome: { screen: FadeInView },
+    youtubeSample: { screen: YoutubeSample },
+    GestureSample: { screen: SomeComponent },
+    DrawerSample: { screen: DrawerSample },
+    SliderSample: { screen: SliderSample },
+    BottomSheet: { screen: BottomSheet },
+    PickerExample: { screen: PickerExample },
+    SnapchatSliderHome: { screen: SnapchatSliderHome }
 });
 
 const styles = StyleSheet.create({
