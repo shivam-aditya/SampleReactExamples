@@ -92,12 +92,15 @@ export class VerticalCarouselExample2 extends Component {
     }
 
     componentDidUpdate() {
-        //Reactotron.log("componentDidUpdate called. 1st item visibility is:" + this._isThisFirstItem);
-        if (this._isThisFirstItem === true && this.state.datasetState[0].content != null) {
+        Reactotron.log("componentDidUpdate called. _isThisFirstItem is:" + this._isThisFirstItem);
+        Reactotron.log("current index is:" + this._carousel.currentIndex);         
+
+        if (this._isThisFirstItem === true && this.state.datasetState[this._carousel.currentIndex].content !== null) {
             //Reactotron.log("1st item content is:" + this.state.datasetState[0].content.content);                            
-            this.setState({ _defaultWebViewContent: this.state.datasetState[0].content.content });
+            this.setState({ _defaultWebViewContent: this.state.datasetState[this._carousel.currentIndex].content.content });
             this._isThisFirstItem = false;
         }
+
     }
 
     setupImpagination() {
@@ -142,6 +145,47 @@ export class VerticalCarouselExample2 extends Component {
         this.setState({ dataset });
     }
 
+    setupImpagination2() {
+        let dataset = new Dataset({
+            pageSize: 10,
+            loadHorizon: 10,
+
+            // Anytime there's a new state emitted, we want to set that on
+            // the componets local state.
+            observe: (datasetState) => {
+                this.setState({ datasetState });
+            },
+
+            // Where to fetch the data from.
+            fetch(pageOffset, pageSize, stats) {
+                realPage = pageOffset + 1;
+                itemNumber = (realPage) * 10;
+                maxIndex = itemNumber - 1;
+                //http://api-news.dailyhunt.in/api/v1/pages/topic/content/104?returnTickers=false&pageNumber=1&src=orig&dsSalt=1507115410834&langCode=en,hi&pageSize=10&cdn=N&dsSize=50&pageScrollStart=1507115410834&cpMaxIndex=9&state=published&dsOffset=0
+                //http://api-news.dailyhunt.in/api/v1/headlines/user/889065839?returnTickers=false&pageNumber=1&pageScrollStart=1506324249000&src=orig&dsSalt=20170925125512127&langCode=en,hi&cpMaxIndex=9&edition=india&pageSize=10&isHome=true&cdn=N&dsOffset=0
+                //url = "http://api-news.dailyhunt.in/api/v1/headlines/user/889065839?returnTickers=false&pageNumber=" + realPage + "&pageScrollStart=1506324249000&src=orig&dsSalt=20170925125512127&langCode=en,hi&cpMaxIndex=" + maxIndex + "&edition=india&pageSize=" + pageSize + "&isHome=true&cdn=N&dsOffset=0";
+                url="http://api-news.dailyhunt.in/api/v1/pages/topic/content/104?returnTickers=false&pageNumber=" + realPage + "&pageScrollStart=1507115373000&src=orig&dsSalt=20171004164252513&langCode=en,hi&cpMaxIndex=" + maxIndex + "&pageSize=" + pageSize + "&state=published&cdn=N&dsOffset=0";
+                Reactotron.log("Item number is :" + itemNumber + " and url is: " + url);
+                return fetch(url)
+                    .then(response => {
+                        Reactotron.log("Response code is: " + response.status);
+                        return response.json()
+                    })
+                    .then((responseJson) => {
+                        return responseJson.data.stories;
+                    })
+                    .catch((error) => {
+                        Reactotron.log("error found");
+                        Reactotron.error(error);
+                    });
+            }
+        });
+
+        // Set the readOffset to the first record in the state
+        dataset.setReadOffset(0);
+        this.setState({ dataset });
+    }
+
     _renderItem({ item, index }) {
         var imageURL = 'http://i3.kym-cdn.com/photos/images/newsfeed/000/925/494/218.png_large';
         imageHeight = 200;
@@ -154,26 +198,26 @@ export class VerticalCarouselExample2 extends Component {
             if (item.content.contentImage !== undefined &&
                 item.content.contentImage != null) {
                 imageURL = item.content.contentImage.url;
-                Reactotron.log("imageURL is " + imageURL)
+                //Reactotron.log("imageURL is " + imageURL)
             }
             else if (item.content.sourceBrandImage !== undefined &&
                 item.content.sourceBrandImage != null) {
                 imageURL = item.content.sourceBrandImage.url;
-                Reactotron.log("imageURL from brand is " + imageURL);
+                //Reactotron.log("imageURL from brand is " + imageURL);
                 imageHeight = 50;
                 imageWidth = 250;
             }
         }
 
         if (item.isPending && !item.isSettled) {
-            return <ActivityIndicator color="#00C497"/>;
+            return <ActivityIndicator color="#00C497" size={'large'} style={{alignItems: 'center', justifyContent: 'center'}}/>;
         }
 
         if (item !== undefined &&
             item != null &&
             item.content !== undefined &&
             item.content != null) {
-            Reactotron.log("item title is: "+item.content.title);
+            //Reactotron.log("item title is: "+item.content.title);
             //Reactotron.log("item content sourceNameUni is: "+item.content.sourceNameUni);
             //Reactotron.log("item content is: " + item.content.content);
 
@@ -283,6 +327,16 @@ export class VerticalCarouselExample2 extends Component {
         )
     }
 
+    HeadlinesApiClick() {
+        this._isThisFirstItem = true;        
+        this.setupImpagination();
+    }
+
+    RealtionshipApiClick() {
+        this._isThisFirstItem = true;                
+        this.setupImpagination2();
+    }
+
     //onAnimateNextPage={(p) => console.log(p)}> 
     render() {
         return (
@@ -292,7 +346,19 @@ export class VerticalCarouselExample2 extends Component {
                     showsPagination={false}
                     index={1}>
                     <View style={styles.swiperBackground}>
-                        <TitleText label="Left" />
+                        {/* <TitleText label="Left" /> */}
+                        <View style={{ margin: 20 }}>
+                            <Button
+                                onPress={() => this.HeadlinesApiClick()}
+                                title="Headlines API"
+                            />
+                        </View>
+                        <View style={{ margin: 20 }}>
+                            <Button style={{ margin: 20 }}
+                                onPress={() => this.RealtionshipApiClick()}
+                                title="Realtionship API"
+                            />
+                        </View>
                     </View>
                     <View style={styles.swiperDefaultBackground}>
                         <Carousel
