@@ -159,7 +159,7 @@ export class CarouselExample extends Component {
                             <CardItem>
                                 <View style={{ flexDirection: 'row' }}>
                                     <Image style={{ resizeMode: 'stretch', height: 30, width: 40 }}
-                                        source={require('../.././assets/fb-like.png.jpeg')} />
+                                        source={require('../.././assets/fb-like.png')} />
                                     <View style={{ marginLeft: 10, alignItems: 'center', justifyContent: 'center' }}>
                                         <Text>{item.content.like.count}</Text>
                                     </View>
