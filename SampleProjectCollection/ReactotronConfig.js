@@ -16,7 +16,7 @@ networking
 Reactotron
     .configure({
     name: 'Sample Project Collection',
-    host: '172.16.18.13',
+    host: '172.16.16.143',
     })
     .use(trackGlobalErrors())
     .use(openInEditor())
