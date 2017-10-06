@@ -159,7 +159,7 @@ export class CarouselExample extends Component {
                             <CardItem>
                                 <View style={{ flexDirection: 'row' }}>
                                     <Image style={{ resizeMode: 'stretch', height: 30, width: 40 }}
-                                        source={require('../.././assets/fb-like.png')} />
+                                        source={require('../.././assets/fb-like.png.jpeg')} />
                                     <View style={{ marginLeft: 10, alignItems: 'center', justifyContent: 'center' }}>
                                         <Text>{item.content.like.count}</Text>
                                     </View>
@@ -237,7 +237,6 @@ export class CarouselExample2 extends Component {
 
         this.state = {
             _defaultWebViewContent:'Bottom Sheet Content',
-            api:'8'            
         }
         this._isThisFirstItem = true;                
         this._renderFavoriteIcon = this._renderFavoriteIcon.bind(this);
@@ -284,7 +283,6 @@ export class CarouselExample2 extends Component {
 
             // Where to fetch the data from.
             fetch(pageOffset, pageSize, stats) {
-                Reactotron.log("API value is" + this.state.api);                
                 realPage = pageOffset + 1;
                 itemNumber = (realPage) * 10;
                 maxIndex = itemNumber - 1;
