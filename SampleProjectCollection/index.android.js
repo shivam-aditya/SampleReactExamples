@@ -7,9 +7,7 @@
 import './ReactotronConfig';
 import React, { Component } from 'react';
 import {
-  AppRegistry,
-  StyleSheet,
-  View,
+  AppRegistry
 } from 'react-native';
 
 import NavigationHome from './src/NavigationHome';
