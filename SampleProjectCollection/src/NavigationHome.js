@@ -49,9 +49,6 @@ export class HomeView extends Component {
             <ScrollView>
                 <View>
                     <View style={styles.button}>
-                        <Button onPress={() => navigate('NotificationSample')} title="NotificationSample" />
-                    </View>
-                    <View style={styles.button}>
                         <Button onPress={() => navigate('newsHome')} title="newsHome" />
                     </View>
                     <View style={styles.button}>
@@ -107,6 +104,9 @@ export class HomeView extends Component {
                     </View>
                     <View style={styles.button}>
                         <Button onPress={() => navigate('VerticalCarouselExample')} title="VerticalCarouselExample" />
+                    </View>
+                    <View style={styles.button}>
+                        <Button onPress={() => navigate('NotificationSample')} title="NotificationSample" />
                     </View>
                 </View>
             </ScrollView>
