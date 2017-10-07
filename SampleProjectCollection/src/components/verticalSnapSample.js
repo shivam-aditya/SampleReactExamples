@@ -67,7 +67,7 @@ export class VerticalCarouselExample2 extends Component {
         super(props);
 
         this.state = {
-            _defaultWebViewContent: 'Bottom Sheet Content',
+            _defaultWebViewContent: 'Description Content',
         }
         this._isThisFirstItem = true;
         this._renderFavoriteIcon = this._renderFavoriteIcon.bind(this);
@@ -92,15 +92,13 @@ export class VerticalCarouselExample2 extends Component {
     }
 
     componentDidUpdate() {
-        Reactotron.log("componentDidUpdate called. _isThisFirstItem is:" + this._isThisFirstItem);
-        Reactotron.log("current index is:" + this._carousel.currentIndex);         
+        //Reactotron.log("componentDidUpdate called. _isThisFirstItem is:" + this._isThisFirstItem);
+        //Reactotron.log("current index is:" + this._carousel.currentIndex);         
 
         if (this._isThisFirstItem === true && this.state.datasetState[this._carousel.currentIndex].content !== null) {
-            //Reactotron.log("1st item content is:" + this.state.datasetState[0].content.content);                            
             this.setState({ _defaultWebViewContent: this.state.datasetState[this._carousel.currentIndex].content.content });
             this._isThisFirstItem = false;
         }
-
     }
 
     setupImpagination() {
@@ -210,7 +208,7 @@ export class VerticalCarouselExample2 extends Component {
         }
 
         if (item.isPending && !item.isSettled) {
-            return <ActivityIndicator color="#00C497" size={'large'} style={{alignItems: 'center', justifyContent: 'center'}}/>;
+            return <ActivityIndicator color="#00C497" size={'large'} style={{marginTop:250}}/>;
         }
 
         if (item !== undefined &&
@@ -337,6 +335,10 @@ export class VerticalCarouselExample2 extends Component {
         this.setupImpagination2();
     }
 
+    ResetIndex() {
+        this._carousel.snapToItem(0, true);
+    }
+
     //onAnimateNextPage={(p) => console.log(p)}> 
     render() {
         return (
@@ -357,6 +359,12 @@ export class VerticalCarouselExample2 extends Component {
                             <Button style={{ margin: 20 }}
                                 onPress={() => this.RealtionshipApiClick()}
                                 title="Realtionship API"
+                            />
+                        </View>
+                        <View style={{ margin: 20 }}>
+                            <Button style={{ margin: 20 }}
+                                onPress={() => this.ResetIndex()}
+                                title="Reset Index"
                             />
                         </View>
                     </View>
