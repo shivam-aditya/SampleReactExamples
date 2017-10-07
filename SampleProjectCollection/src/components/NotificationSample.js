@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Picker, AppState, Platform, Button } from 'react-native';
-import PushController from './PushController';
 import PushNotification from 'react-native-push-notification';
 import Reactotron from 'reactotron-react-native';
 
