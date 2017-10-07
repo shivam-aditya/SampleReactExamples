@@ -36,9 +36,8 @@ import { DrawerSample } from './components/DrawerSample';
 import { SliderSample, BottomSheet } from './components/SliderSample';
 import { PickerExample } from './components/PickerSample'
 import SnapchatSliderHome from './components/SnapchatSwiperSample'
-import {VerticalCarouselExample, VerticalCarouselExample2} from './components/verticalSnapSample'
 import {VerticalCarouselExample2} from './components/verticalSnapSample'
-import {NotificationSample} from './components/NotificationSample'
+import NotificationSample from './components/NotificationSample'
 
 export class HomeView extends Component {
     static navigationOptions = {
