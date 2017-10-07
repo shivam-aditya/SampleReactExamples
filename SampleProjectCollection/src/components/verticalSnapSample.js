@@ -24,6 +24,7 @@ import randomcolor from 'randomcolor'
 import Dataset from 'impagination';
 import HTMLView from 'react-native-htmlview';
 import SlidingUpPanel from 'rn-sliding-up-panel'
+import HttpService from '../services/HttpService';
 
 const { width, height } = Dimensions.get('window');
 
@@ -49,6 +50,60 @@ const { width, height } = Dimensions.get('window');
 //     }
 // }
 
+class NewsDetailsAppendContent extends Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+        isLoading: true,
+        content: ''
+      }
+    }
+    componentDidMount() {
+      let URL = 'https://api.github.com/repos/facebook/react-native';
+      this.fetchDataFromServer(URL);
+    }
+  
+    fetchDataFromServer(URL) {
+      HttpService.getResponseData4(URL,
+        (resultData) => {
+          if (resultData.stargazers_count !== undefined &&
+            resultData.stargazers_count != null) {
+  
+            const stars = resultData.stargazers_count;
+            console.log('twinkle stars from json is:' + stars);
+  
+            if (stars > 0) {
+              this.setState({
+                isLoading: false,
+                stars: stars,
+              });
+            }
+          }
+        },
+        (error) => {
+          console.log(error);
+        });
+    }
+  
+    render() {
+      if (this.state.isLoading) {
+        return (
+          <View style={{ flex: 1, paddingTop: 20 }}>
+            <ActivityIndicator />
+          </View>
+        );
+      }
+  
+      return (
+        <View style={sampleStylesVar.sampleStyles.containerElement}>
+          <Text style={{ paddingTop: 10, paddingBottom: 20, alignItems: 'center' }}>
+            React Native has {this.state.stars} stars
+          </Text>
+        </View>
+      )
+    }
+  }
+
 export class VerticalCarouselExample2 extends Component {
     static navigationOptions = {
         title: `News`,
@@ -68,6 +123,7 @@ export class VerticalCarouselExample2 extends Component {
 
         this.state = {
             _defaultWebViewContent: 'Description Content',
+            _appendedWebViewContent: '',            
         }
         this._isThisFirstItem = true;
         this._renderFavoriteIcon = this._renderFavoriteIcon.bind(this);
@@ -97,8 +153,32 @@ export class VerticalCarouselExample2 extends Component {
 
         if (this._isThisFirstItem === true && this.state.datasetState[this._carousel.currentIndex].content !== null) {
             this.setState({ _defaultWebViewContent: this.state.datasetState[this._carousel.currentIndex].content.content });
+            this.updateAppendedContent(this.state.datasetState[this._carousel.currentIndex].content.id);
             this._isThisFirstItem = false;
         }
+    }
+
+    updateAppendedContent= (id) => {
+        if(id!==undefined && id!=null)
+        //http://api-news.dailyhunt.in/api/v1/news/article/content?pageNumber=2&articleId=74407671&includeExternalAds=False&appLanguage=en 
+        url = "http://api-news.dailyhunt.in/api/v1/news/article/content?pageNumber=2&articleId=" + id + "&includeExternalAds=False&appLanguage=en ";
+        
+        HttpService.getResponseData4(url,
+            (resultData) => {
+                if (resultData.data !== undefined &&
+                    resultData.data != null) {
+
+                        Reactotron.log('additional content for item id '+ id + ' is:' + resultData.data);
+
+                    this.setState({
+                        //isLoading: false,
+                        _appendedWebViewContent: resultData.data,
+                    });
+                }
+            },
+            (error) => {
+                Reactotron.log(error);
+            });
     }
 
     setupImpagination() {
@@ -268,9 +348,12 @@ export class VerticalCarouselExample2 extends Component {
                         {/* <TouchableHighlight onPress={() => this.onItemTap(item.content.deepLinkUrl)}> */}
                         <TouchableHighlight>
                             <View style={styles.cardItem}>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <View style={{ alignItems: 'flex-start', justifyContent: 'flex-start' }}>
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                    <View style={{ marginRight: 20 }}>
                                         <Text>Source: {item.content.sourceNameUni}</Text>
+                                    </View>
+                                    <View style={{ marginLeft:80 }}>
+                                        <Text>Read more -> </Text>
                                     </View>
                                 </View>
                             </View>
@@ -297,7 +380,8 @@ export class VerticalCarouselExample2 extends Component {
     setReadOffset = (currentItemIndex) => {
         Reactotron.log('currentItemIndex of the list is: ' + currentItemIndex);
         //Reactotron.log(this.state.datasetState[currentItemIndex].content.content);
-        this.setState({ visible: false, _defaultWebViewContent: this.state.datasetState[currentItemIndex].content.content })
+        this.setState({ _defaultWebViewContent: this.state.datasetState[currentItemIndex].content.content })
+        this.updateAppendedContent(this.state.datasetState[currentItemIndex].content.id);        
         //this.state.dataset.setReadOffset(currentItemIndex);
     }
 
@@ -383,20 +467,28 @@ export class VerticalCarouselExample2 extends Component {
                             inactiveSlideScale={1}
                         />
                     </View>
-                    <View style={styles.swiperBackground}>
-                        <View style={styles.container}>
-                            <HTMLView
-                                value={this.state._defaultWebViewContent}
-                                stylesheet={stylesHtml}
-                                style={{ marginTop: 10, marginLeft: 20, marginRight: 20, }}
-                                onLinkPress={(url) => Reactotron.log('clicked link: ', url)}
-                            />
-                            {/* <WebView
+                    <View style={styles.swiperDefaultBackground}>
+                        <ScrollView>
+                            <View style={styles.container}>
+                                <HTMLView
+                                    value={this.state._defaultWebViewContent}
+                                    stylesheet={stylesHtml}
+                                    style={{ marginTop: 10, marginLeft: 20, marginRight: 20, }}
+                                    onLinkPress={(url) => Reactotron.log('clicked link: ', url)}
+                                />
+                                <HTMLView
+                                    value={this.state._appendedWebViewContent}
+                                    stylesheet={stylesHtml}
+                                    style={{ marginTop: 0, marginLeft: 20, marginRight: 20, }}
+                                    onLinkPress={(url) => Reactotron.log('clicked link: ', url)}
+                                />
+                                {/* <WebView
                                         source={{ html: this.state._defaultWebViewContent }}
                                         style={{flex:1, marginLeft: 20, marginRight: 20 }}
                                         scalesPageToFit={true}
                                         /> */}
-                        </View>
+                            </View>
+                        </ScrollView>
                     </View>
                 </Swiper>
             </View>
