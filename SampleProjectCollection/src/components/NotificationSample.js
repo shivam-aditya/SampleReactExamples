@@ -124,14 +124,14 @@ export default class NotificationSample extends Component {
         </Picker>
         <View style={{ margin: 20 }}>
           <Button
-            onPress={() => this.SendNotificationNow()}
-            title="Send Notification Now"
+            onPress={() => this.EnableDelayedBackgroundNotification()}
+            title="Enable delayed background Notification"
           />
         </View>
         <View style={{ margin: 20 }}>
           <Button
-            onPress={() => this.EnableDelayedBackgroundNotification()}
-            title="Enable delayed background Notification"
+            onPress={() => this.SendNotificationNow()}
+            title="Send Notification Now"
           />
         </View>
         <PushController />
