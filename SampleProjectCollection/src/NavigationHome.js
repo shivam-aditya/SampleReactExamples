@@ -37,6 +37,8 @@ import { SliderSample, BottomSheet } from './components/SliderSample';
 import { PickerExample } from './components/PickerSample'
 import SnapchatSliderHome from './components/SnapchatSwiperSample'
 import {VerticalCarouselExample, VerticalCarouselExample2} from './components/verticalSnapSample'
+import {VerticalCarouselExample2} from './components/verticalSnapSample'
+import {NotificationSample} from './components/NotificationSample'
 
 export class HomeView extends Component {
     static navigationOptions = {
@@ -47,6 +49,9 @@ export class HomeView extends Component {
         return (
             <ScrollView>
                 <View>
+                    <View style={styles.button}>
+                        <Button onPress={() => navigate('NotificationSample')} title="NotificationSample" />
+                    </View>
                     <View style={styles.button}>
                         <Button onPress={() => navigate('newsHome')} title="newsHome" />
                     </View>
@@ -137,7 +142,8 @@ export default NavigationHome = StackNavigator({
     BottomSheet: { screen: BottomSheet },
     PickerExample: { screen: PickerExample },
     SnapchatSliderHome: { screen: SnapchatSliderHome },
-    VerticalCarouselExample: { screen: VerticalCarouselExample2 }
+    VerticalCarouselExample: { screen: VerticalCarouselExample2 },
+    NotificationSample: { screen: NotificationSample }
 });
 
 const styles = StyleSheet.create({
