@@ -36,8 +36,9 @@ import { DrawerSample } from './components/DrawerSample';
 import { SliderSample, BottomSheet } from './components/SliderSample';
 import { PickerExample } from './components/PickerSample'
 import SnapchatSliderHome from './components/SnapchatSwiperSample'
-import {VerticalCarouselExample2} from './components/verticalSnapSample'
+import { VerticalCarouselExample2 } from './components/verticalSnapSample'
 import NotificationSample from './components/NotificationSample'
+import SqliteSample from './components/SqliteSample'
 
 export class HomeView extends Component {
     static navigationOptions = {
@@ -108,6 +109,9 @@ export class HomeView extends Component {
                     <View style={styles.button}>
                         <Button onPress={() => navigate('NotificationSample')} title="NotificationSample" />
                     </View>
+                    <View style={styles.button}>
+                        <Button onPress={() => navigate('SqliteSample')} title="SqliteSample" />
+                    </View>
                 </View>
             </ScrollView>
         );
@@ -142,7 +146,8 @@ export default NavigationHome = StackNavigator({
     PickerExample: { screen: PickerExample },
     SnapchatSliderHome: { screen: SnapchatSliderHome },
     VerticalCarouselExample: { screen: VerticalCarouselExample2 },
-    NotificationSample: { screen: NotificationSample }
+    NotificationSample: { screen: NotificationSample },
+    SqliteSample: { screen: SqliteSample }
 });
 
 const styles = StyleSheet.create({
