@@ -25,6 +25,7 @@
 		"react-native-progressive-image": "^1.0.4",
 		"react-native-push-notification": "^3.0.1",
 		"react-native-snap-carousel": "^3.3.2",
+		"react-native-sqlite-storage": "^3.3.3",
 		"react-native-swipe-cards": "^0.1.0",
 		"react-native-swipe-gestures": "^1.0.2",
 		"react-native-swiper": "^1.5.13",
