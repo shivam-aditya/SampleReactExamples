@@ -470,6 +470,9 @@ export class VerticalCarouselExample2 extends Component {
                     <View style={styles.swiperDefaultBackground}>
                         <ScrollView>
                             <View style={styles.container}>
+                                <View style = {{marginTop : 20}}>
+                                    <Text  style={{ fontWeight: 'bold', fontSize: 18 }}>News Details</Text>
+                                </View>
                                 <HTMLView
                                     value={this.state._defaultWebViewContent}
                                     stylesheet={stylesHtml}
